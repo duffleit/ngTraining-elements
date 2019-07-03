@@ -14,11 +14,11 @@ This exercise helps you in understanding the usage of Angular Elements and dynam
 
 4. Add support for Angular elements with `ng add @angular/elements`
 
-5. Register your component as a custom element: 
+5. Register your component as a custom element, and add it as entryComponents in the corresponding module: 
 
 ```
   constructor(private injector: Injector) {
-    const element = createCustomElement(UserWidget, { injector: this.injector });
+    const element = createCustomElement(UserWidgetComponent, { injector: this.injector });
     customElements.define('user-widget', element);
   }
 ```
@@ -36,7 +36,7 @@ export class AppModule {
 }
 ```
 
-7. Use your custom element. 
+7. Use your custom element to your `index.html`.
 
 ### Lazy Load Element
 
