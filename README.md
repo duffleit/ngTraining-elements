@@ -72,7 +72,7 @@ export class CustomElementLoadingService  {
             return Promise.resolve();
         }
 
-        const path = 'src/app/elements/....module.ts#ModuleName'
+        const path = 'src/app/elements/....module#ModuleName'
         
         return this
             .loader
