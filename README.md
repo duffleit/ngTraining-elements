@@ -10,7 +10,7 @@ This exercise helps you in understanding the usage of Angular Elements and dynam
 
 2. Create an `elements/`-folder within the `src` dictionary. 
 
-3. Create a new module `ng g user-widget` and add a `user-widget` component to it.
+3. Create a new module `ng g m user-widget` and add a `user-widget` component to it.
 
 4. Add support for Angular elements with `ng add @angular/elements`
 
