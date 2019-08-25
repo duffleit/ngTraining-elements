@@ -2,9 +2,10 @@ import { NgModule, Injector, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserWidgetComponent } from './user-widget/user-widget.component';
 import { createCustomElement } from '@angular/elements';
+import { PushPipe } from './user-widget/push.pipe';
 
 @NgModule({
-  declarations: [UserWidgetComponent],
+  declarations: [UserWidgetComponent, PushPipe],
   imports: [
     CommonModule
   ],
