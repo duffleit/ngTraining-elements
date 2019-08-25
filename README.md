@@ -10,7 +10,7 @@ This exercise helps you in understanding the usage of Angular Elements and dynam
 
 2. Create an `elements/`-folder within the `src` dictionary. 
 
-3. Create a new module `ng g m user-widget` and add a `user-widget` component to it.
+3. Create a new module in this folder `ng g m user-widget` and add a `user-widget` component to it.
 
 4. Add support for Angular elements with `ng add @angular/elements`
 
@@ -42,7 +42,7 @@ export class AppModule {
 
 1. Remove your user-widget module form your app-module imports. 
 
-2. Add it to the lazyModule of the `angular.json`:
+2. Add it to the lazyModule of the `angular.json` (via: `projects/?/architect/build/options`):
 
 ```
 "lazyModules": [
@@ -56,7 +56,7 @@ export class AppModule {
 @Injectable({
     providedIn: 'root'
 })
-export class CustomElementLoadingService  {
+export class CustomElementLoadingService {
 
     constructor(
         private loader: NgModuleFactoryLoader,
@@ -64,26 +64,25 @@ export class CustomElementLoadingService  {
     ) {
     }
 
-    private moduleRef: NgModuleRef<any>;
+    private moduleRefs: { [key: string]: NgModuleRef<any> } = {};
 
-    load(): Promise<void> {
-        
-        if (this.moduleRef) {
+    load(widgetFileName: string, widgetTypeName: string): Promise<void> {
+        if (this.moduleRefs[widgetFileName + widgetTypeName]) {
             return Promise.resolve();
         }
 
-        const path = 'src/app/elements/....module#ModuleName'
-        
+        const path = `src/app/elements/${widgetFileName}#${widgetTypeName}`;
+
         return this
             .loader
             .load(path)
             .then(moduleFactory => {
-                this.moduleRef = moduleFactory.create(this.injector).instance;
+                this.moduleRefs[widgetFileName + widgetTypeName] = moduleFactory.create(this.injector).instance;
             })
-            .catch(err => {
-                // error handling
+            .catch(error => {
+                console.error(`Could not load widget ${widgetTypeName} (from: ${widgetFileName}.ts)`, error);
             });
-        
+
     }
 }
 ```
@@ -143,4 +142,32 @@ defineCustomElements(window);
 
 ```
 @ViewChild('ref') userWidgetComponent: ElementRef<HTMLUserWidgetElement>;
+```
+
+### Create Angular components without Zone.js: 
+
+1. Disable ZoneJS for your application: 
+
+```
+platformBrowserDynamic()
+   .bootstrapModule(
+       AppModule, { ngZone: 'noop' })
+   .catch(err => console.log(err));
+```
+
+2. Trigger change detection manually: 
+
+```
+constructor(private cd: ChangeDetectorRef) { }
+
+changeSomeState(): void {
+  // change some component state here
+  this.cd.markForCheck();
+}
+
+```
+
+3. Bonus: Use the [push-pipe]("https://raw.githubusercontent.com/Toxicable/angular/798ce0b5288c7a8b522d1ca710a4f64e427e931c/packages/common/src/pipes/push_pipe.ts") and a `BehaviorSubject` instead.
+```
+
 ```
